@@ -467,7 +467,7 @@ h1,h2,h3{font-family:'Lora',serif}
 // ═══════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════
-const WEBHOOK_URL  = 'https://script.google.com/a/macros/gen.tech/s/AKfycbyhSLQ5ZegSbPu_wBfYMt-_QDOfrLsy7egz8sEtR6CJ701RtjIQ0rcrww8gBouRBdE/exec'; // замінити після деплою Apps Script
+const WEBHOOK_URL  = 'https://nebula-gemini.alina-rudenkova.workers.dev/sheets';
 const PROXY_URL    = 'https://nebula-gemini.alina-rudenkova.workers.dev';
 const GEMINI_MODEL = 'gemini-2.5-flash';
 
@@ -1019,17 +1019,22 @@ async function sendToSheets(reason) {
   };
 
   try {
-    await fetch(WEBHOOK_URL, {
+    const res = await fetch(WEBHOOK_URL, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    dotEl.className = 'sheets-dot ok';
-    msgEl.textContent = 'Results saved to Google Sheets ✓';
+    const data = await res.json();
+    if (data.ok) {
+      dotEl.className = 'sheets-dot ok';
+      msgEl.textContent = 'Results saved to Google Sheets ✓';
+    } else {
+      throw new Error(data.error || 'Unknown error');
+    }
   } catch(e) {
+    console.error('Sheets error:', e);
     dotEl.className = 'sheets-dot err';
-    msgEl.textContent = 'Could not save to Google Sheets — check webhook URL';
+    msgEl.textContent = 'Could not save to Google Sheets: ' + e.message;
   }
 }
 
