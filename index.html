@@ -59,16 +59,22 @@ html,body{height:100%;background:var(--bg);font-family:Inter,system-ui,sans-seri
 .select-sub{font-size:12px;color:var(--g6);margin-bottom:20px;max-width:540px;line-height:1.7}
 .advisor-chip{display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;padding:6px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--g6)}
 .advisor-chip strong{color:var(--purple);font-weight:500}
-.status-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
-.status-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:20px 14px 16px;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden}
-.status-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc-color,#6F70F6);opacity:0;transition:opacity .2s}
-.status-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.5)}
-.status-card:hover::before,.status-card.sel::before{opacity:1}
-.status-card.sel{border-color:var(--sc-color,#6F70F6);background:rgba(255,255,255,.03)}
-.sc-emoji{font-size:1.8rem;margin-bottom:10px;display:block}
-.sc-status{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin-bottom:4px}
-.sc-name{font-family:Georgia,serif;font-size:.95rem;color:var(--cream);margin-bottom:3px}
-.sc-desc{font-size:10px;color:var(--g6);line-height:1.5}
+.level-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.level-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:26px 18px 22px;cursor:pointer;transition:all .22s;text-align:center;position:relative;overflow:hidden}
+.level-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--lc,#6F70F6);opacity:0;transition:opacity .2s}
+.level-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.5);border-color:var(--lc,#6F70F6)}
+.level-card:hover::before,.level-card.sel::before{opacity:1}
+.level-card.sel{border-color:var(--lc,#6F70F6);background:rgba(111,112,246,.07)}
+.level-card[data-level="light"]{--lc:#57FFA7}
+.level-card[data-level="deep"]{--lc:#FFC60A}
+.level-card[data-level="mastery"]{--lc:#F06050}
+.lc-icon{font-size:2rem;margin-bottom:12px;display:block}
+.lc-name{font-size:13px;font-weight:600;letter-spacing:1px;margin-bottom:6px}
+.level-card[data-level="light"] .lc-name{color:#57FFA7}
+.level-card[data-level="deep"] .lc-name{color:#FFC60A}
+.level-card[data-level="mastery"] .lc-name{color:#F06050}
+.lc-desc{font-size:11px;color:var(--g6);line-height:1.6;margin-bottom:10px}
+.lc-clients{font-size:10px;color:var(--g4);letter-spacing:.5px}
 
 /* ── READY ── */
 #screen-ready{flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--bg);overflow-y:auto}
@@ -215,11 +221,30 @@ html,body{height:100%;background:var(--bg);font-family:Inter,system-ui,sans-seri
       <span class="select-eyebrow">Nebula Academy · AI Retained Chat Simulation</span>
       <img class="nlogo-icon" src="data:image/png;base64,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" alt="Nebula">
     </div>
-    <h1 class="select-title">Choose Your Client</h1>
-    <p class="select-sub">Each client has a hidden motivation archetype (FEEL / HEAL / KNOW). Identify it, hold the connection, and guide them to a natural farewell.</p>
+    <h1 class="select-title">Choose your practice</h1>
+    <p class="select-sub">Select a level. A client will be randomly assigned to match your choice.</p>
     <div class="advisor-chip">Signed in as <strong id="chip-name">--</strong></div>
-    <div class="status-grid" id="status-grid"></div>
-    <button class="primary-btn" id="start-btn" disabled onclick="startReveal()">Select a client to begin</button>
+    <div class="level-grid">
+      <div class="level-card" data-level="light" onclick="selectLevel('light')">
+        <span class="lc-icon">&#127807;</span>
+        <div class="lc-name">Light Practice</div>
+        <div class="lc-desc">Open or reserved clients. Build confidence and warmth.</div>
+        <div class="lc-clients">2 clients available</div>
+      </div>
+      <div class="level-card" data-level="deep" onclick="selectLevel('deep')">
+        <span class="lc-icon">&#9889;</span>
+        <div class="lc-name">Deep Practice</div>
+        <div class="lc-desc">Impatient or aggressive clients. Tests your composure.</div>
+        <div class="lc-clients">2 clients available</div>
+      </div>
+      <div class="level-card" data-level="mastery" onclick="selectLevel('mastery')">
+        <span class="lc-icon">&#128293;</span>
+        <div class="lc-name">Mastery Practice</div>
+        <div class="lc-desc">Sets traps, contradicts herself. The ultimate challenge.</div>
+        <div class="lc-clients">1 client available</div>
+      </div>
+    </div>
+    <button class="primary-btn" id="start-btn" disabled onclick="startReveal()">Select a practice level to begin &#9670;</button>
   </div>
 </div>
 
@@ -350,7 +375,7 @@ html,body{height:100%;background:var(--bg);font-family:Inter,system-ui,sans-seri
 </div>
 
 <script>
-const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzayLPaDpQUEsSiTJUjBo4GdO7ut98E1Zn3I51xV5BshORtNgU0uiuZ1OXFRmaUSZlv/exec';
+const WEBHOOK_URL = 'https://nebula-gemini.alina-rudenkova.workers.dev/sheets';
 const PROXY_URL   = 'https://nebula-gemini.alina-rudenkova.workers.dev';
 const GEMINI_MODEL = 'gemini-2.5-flash';
 
@@ -409,53 +434,18 @@ const PERSONAS = [
    }}
 ];
 
-// --- ВИПРАВЛЕНИЙ БЛОК ЗМІННИХ ---
-var advisorName = '';
-var advisorEmail = '';
-var selectedStatus = null;
-var persona = null;
-var archetype = null;
-
+let advisorName='',advisorEmail='',selectedStatus=null,persona=null,archetype=null;
 let sessionEnded=false,msgCount=0,transcript=[],geminiHistory=[];
 let timerInterval=null,sessionStartTime=null;
 let detectedArchetype=null,finalScore=null,finalFeedbackText='';
 
-// --- ВИПРАВЛЕНА ФУНКЦІЯ ЛОГІНУ ---
-function doLogin(){
-  var n = document.getElementById('adv-name').value.trim();
-  var e = document.getElementById('adv-email').value.trim();
-  var err = document.getElementById('login-err');
-  
-  if(!n){err.textContent='Please enter your name.';return;}
-  if(!e||!e.includes('@')){err.textContent='Please enter a valid email.';return;}
-  
-  // ПРИСВОЮЄМО значення глобальним змінним
-  advisorName = n;
-  advisorEmail = e;
-  
-  err.textContent='';
-  document.getElementById('chip-name').textContent = n;
-  switchScreen('screen-login','screen-select');
-}
-
-// Build status cards dynamically
-(function(){
-  var grid=document.getElementById('status-grid');
-  ['low','casual','promising','vip','whale'].forEach(function(s){
-    var sc=STATUS_CONFIG[s];
-    var card=document.createElement('div');
-    card.className='status-card';
-    card.dataset.status=s;
-    card.style.cssText='--sc-color:'+sc.dotColor;
-    var emoji=document.createElement('span');emoji.className='sc-emoji';emoji.textContent=sc.emoji;
-    var lbl=document.createElement('div');lbl.className='sc-status';lbl.style.color=sc.dotColor;lbl.textContent=sc.label;
-    var nm=document.createElement('div');nm.className='sc-name';nm.textContent=STATUS_NAMES[s];
-    var ds=document.createElement('div');ds.className='sc-desc';ds.textContent=STATUS_DESCS[s];
-    card.append(emoji,lbl,nm,ds);
-    card.addEventListener('click',function(){selectStatus(s);});
-    grid.appendChild(card);
-  });
-})();
+// Level to persona mapping
+const LEVEL_MAP = {
+  light:   ['low','casual'],
+  deep:    ['promising','vip'],
+  mastery: ['whale']
+};
+let selectedLevel = null;
 
 async function callGemini(sys,contents,maxTok,retries){
   maxTok=maxTok||200;retries=retries===undefined?2:retries;
@@ -482,33 +472,35 @@ function doLogin(){
   switchScreen('screen-login','screen-select');
 }
 
-function selectStatus(s){
-  selectedStatus=s;
-  document.querySelectorAll('.status-card').forEach(function(c){c.classList.toggle('sel',c.dataset.status===s);});
-  var sc=STATUS_CONFIG[s];
+function selectLevel(level){
+  selectedLevel=level;
+  document.querySelectorAll('.level-card').forEach(function(c){c.classList.toggle('sel',c.dataset.level===level);});
   var btn=document.getElementById('start-btn');
   btn.disabled=false;
-  btn.textContent=sc.emoji+' '+sc.label+' \u2014 '+STATUS_NAMES[s]+' selected';
+  var labels={light:'Light Practice Selected ◆',deep:'Deep Practice Selected ◆',mastery:'Mastery Practice Selected ◆'};
+  btn.textContent=labels[level];
 }
 
 function startReveal(){
-  if(!selectedStatus)return;
+  if(!selectedLevel)return;
+  var pool=LEVEL_MAP[selectedLevel];
+  var randomStatus=pool[Math.floor(Math.random()*pool.length)];
+  selectedStatus=randomStatus;
   persona=PERSONAS[STATUS_TO_IDX[selectedStatus]];
   archetype=persona.archetypes[Math.floor(Math.random()*persona.archetypes.length)];
   var sc=STATUS_CONFIG[selectedStatus];
-  // avatar ring — neutral purple style
   var ring=document.getElementById('ready-avatar-ring');
-  ring.style.color='#534AB7'; ring.style.borderColor='#7F77DD'; ring.style.background='#EEEDFE';
+  ring.style.color='#534AB7';ring.style.borderColor='#7F77DD';ring.style.background='#EEEDFE';
   document.getElementById('ready-avatar-letter').textContent=persona.avatar;
   document.getElementById('ready-name').textContent=persona.name;
   var badge=document.getElementById('ready-status-badge');
   badge.textContent=sc.emoji+' '+sc.label;
-  badge.style.color=sc.dotColor; badge.style.borderColor=sc.bc;
+  badge.style.color=sc.dotColor;badge.style.borderColor=sc.bc;
   badge.style.background=sc.bc.replace('.5)',',.08)');
   document.getElementById('bg-knowledge').textContent=persona.background.knowledge;
   document.getElementById('bg-emotion').textContent=persona.background.emotion;
   document.getElementById('fmp-text').textContent='"'+persona.opening+'"';
-  document.getElementById('fmp-meta').textContent=persona.name+' \u00B7 opening message';
+  document.getElementById('fmp-meta').textContent=persona.name+' · opening message';
   switchScreen('screen-select','screen-ready');
 }
 
@@ -695,7 +687,7 @@ async function sendToSheets(reason){
   var me=document.getElementById('sheets-msg');
   se.style.display='flex';
   var ol=reason==='farewell'?'Farewell':reason==='exit'?'Exit':'Manual End';
-  var p={timestamp:new Date().toISOString(),practiceName: "AI Retained Chat Simulation",advisorName:advisorName,advisorEmail:advisorEmail,persona:persona.name,personaLevel:persona.level,personaType:selectedStatus,difficulty:selectedStatus,archetype:archetype,archetypeDetected:detectedArchetype?'Yes':'No',outcome:ol,score:finalScore||'--',msgCount:msgCount,feedback:finalFeedbackText.slice(0,3000)};
+  var p={timestamp:new Date().toISOString(),advisorName:advisorName,advisorEmail:advisorEmail,persona:persona.name,personaLevel:persona.level,personaType:selectedStatus,difficulty:selectedStatus,archetype:archetype,archetypeDetected:detectedArchetype?'Yes':'No',outcome:ol,score:finalScore||'--',msgCount:msgCount,feedback:finalFeedbackText.slice(0,3000)};
   try{
     var r=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     var d=await r.json();
