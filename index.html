@@ -671,7 +671,7 @@ async function sendToSheets(reason){
   var me=document.getElementById('sheets-msg');
   se.style.display='flex';
   var ol=reason==='farewell'?'Farewell':reason==='exit'?'Exit':'Manual End';
-  var p={timestamp:new Date().toISOString(),advisorName:advisorName,advisorEmail:advisorEmail,persona:persona.name,personaLevel:persona.level,personaType:selectedStatus,difficulty:selectedStatus,archetype:archetype,archetypeDetected:detectedArchetype?'Yes':'No',outcome:ol,score:finalScore||'--',msgCount:msgCount,feedback:finalFeedbackText.slice(0,3000)};
+  var p={timestamp:new Date().toISOString(),practiceName: "AI Retained Chat Simulation",advisorName:advisorName,advisorEmail:advisorEmail,persona:persona.name,personaLevel:persona.level,personaType:selectedStatus,difficulty:selectedStatus,archetype:archetype,archetypeDetected:detectedArchetype?'Yes':'No',outcome:ol,score:finalScore||'--',msgCount:msgCount,feedback:finalFeedbackText.slice(0,3000)};
   try{
     var r=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     var d=await r.json();
