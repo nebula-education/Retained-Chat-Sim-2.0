@@ -350,7 +350,7 @@ html,body{height:100%;background:var(--bg);font-family:Inter,system-ui,sans-seri
 </div>
 
 <script>
-const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzAKor9PlzdEGxnQxuc8zybRxTbAE5Zx1a-QGCIY5BkQxJxDI44m1RcpMMCTpGkogjC/exec';
+const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw3sm2wquQ589w_OPiR9vBTRpbkWA7t67uKNjyH-Cap36htY3c4vcHGSsq76FL_uKAd/exec';
 const PROXY_URL   = 'https://nebula-gemini.alina-rudenkova.workers.dev';
 const GEMINI_MODEL = 'gemini-2.5-flash';
 
@@ -409,10 +409,34 @@ const PERSONAS = [
    }}
 ];
 
-let advisorName='',advisorEmail='',selectedStatus=null,persona=null,archetype=null;
+// --- ВИПРАВЛЕНИЙ БЛОК ЗМІННИХ ---
+var advisorName = '';
+var advisorEmail = '';
+var selectedStatus = null;
+var persona = null;
+var archetype = null;
+
 let sessionEnded=false,msgCount=0,transcript=[],geminiHistory=[];
 let timerInterval=null,sessionStartTime=null;
 let detectedArchetype=null,finalScore=null,finalFeedbackText='';
+
+// --- ВИПРАВЛЕНА ФУНКЦІЯ ЛОГІНУ ---
+function doLogin(){
+  var n = document.getElementById('adv-name').value.trim();
+  var e = document.getElementById('adv-email').value.trim();
+  var err = document.getElementById('login-err');
+  
+  if(!n){err.textContent='Please enter your name.';return;}
+  if(!e||!e.includes('@')){err.textContent='Please enter a valid email.';return;}
+  
+  // ПРИСВОЮЄМО значення глобальним змінним
+  advisorName = n;
+  advisorEmail = e;
+  
+  err.textContent='';
+  document.getElementById('chip-name').textContent = n;
+  switchScreen('screen-login','screen-select');
+}
 
 // Build status cards dynamically
 (function(){
